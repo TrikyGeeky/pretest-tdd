@@ -46,7 +46,7 @@ public class CustomerAccountTest {
 	@Test
 	public void testAddPositiveAmount() {
 		customerAccount.add(400d);
-		assertTrue("verify that the new balance is what's expected", customerAccount.getBalance() == 400);
+		assertTrue("verify that the new balance is what's expected", customerAccount.getBalance() == 400d);
 	}
 
 	/**
@@ -60,6 +60,24 @@ public class CustomerAccountTest {
 		rule = new CustomerAccountRule();
 		customerAccount.withdrawAndReportBalance(30d, rule);
 	}
+	
+	/**
+	 * Tests that an illegal withdrawal does not change the customer balance.
+	 * 
+	 */
+	@Test
+	public void testWithdrawAndBalanceNotChanged() {
+		rule = new CustomerAccountRule();
+		Double initialBalance = customerAccount.getBalance();
+		try {
+			customerAccount.withdrawAndReportBalance(30d, rule);
+		} catch (IllegalBalanceException e) {
+			System.out.println(e.toString());
+		} finally {
+			assertTrue("verify that Balance hasn't changed after illegal withdraw", 
+					customerAccount.getBalance() == initialBalance);
+		}
+	}
 
 	/**
 	 * Tests that a withdraw has been done without raising an
@@ -67,20 +85,14 @@ public class CustomerAccountTest {
 	 * 
 	 */
 	@Test
-	public void testSuccessfulWithdraw() {
+	public void testSuccessfulWithdraw() throws IllegalBalanceException {
 		rule = new CustomerAccountRule();
 		customerAccount.add(100d);
 		
-		try {
-			customerAccount.withdrawAndReportBalance(30d, rule);
-		} catch (IllegalBalanceException e) {
-			assumeNoException("verify that no exception is raised after withdraw", e);
-		}
+		customerAccount.withdrawAndReportBalance(30d, rule);
 		
 		assertTrue("verify that the balance has been updated after succesful withdraw", 
 				customerAccount.getBalance() == 70d);
 	}
-
-	// Also implement missing unit tests for the above functionalities.
 
 }
