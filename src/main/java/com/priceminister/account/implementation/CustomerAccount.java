@@ -12,7 +12,7 @@ public class CustomerAccount implements Account {
 	}
 	
     public void add(Double addedAmount) {
-        // TODO Auto-generated method stub
+        this.balance += addedAmount;
     }
 
     public Double getBalance() {

@@ -45,7 +45,9 @@ public class CustomerAccountTest {
      */
     @Test
     public void testAddPositiveAmount() {
-        fail("not yet implemented");
+    	customerAccount.add(400d);
+		assertTrue("verify that the new balance is what's expected", 
+				customerAccount.getBalance() == 400);
     }
     
     /**
